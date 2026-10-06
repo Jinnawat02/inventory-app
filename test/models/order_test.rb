@@ -124,4 +124,16 @@ class OrderTest < ActiveSupport::TestCase
     assert_not orders(:approved_one).editable?
     assert_not Order.new.editable?
   end
+
+  test "admin_queue puts the oldest pending orders first, then the rest newest first" do
+    newest_pending = users(:one).orders.create!(purpose: "ล่าสุด", order_items_attributes: [ { item_id: items(:paper).id, quantity: 1 } ])
+
+    assert_equal [ orders(:pending_two), orders(:pending_one), newest_pending, orders(:approved_one), orders(:rejected_two) ], Order.admin_queue.to_a
+  end
+
+  test "with_status filters known statuses and ignores unknown ones" do
+    assert_equal [ orders(:approved_one) ], Order.with_status("approved").to_a
+    assert_equal Order.count, Order.with_status("lost").count
+    assert_equal Order.count, Order.with_status(nil).count
+  end
 end

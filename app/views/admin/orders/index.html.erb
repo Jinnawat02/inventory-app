@@ -1,0 +1,40 @@
+<% content_for :title, "ใบเบิกทั้งหมด" %>
+
+<h1 class="text-2xl font-bold mb-6">ใบเบิกทั้งหมด</h1>
+
+<nav class="flex flex-wrap gap-2 mb-4 text-sm" id="status_filters">
+  <%= link_to "ทั้งหมด", admin_orders_path, class: [ "rounded-full px-3 py-1", @status.nil? ? "bg-gray-800 text-white" : "bg-white text-gray-700 hover:bg-gray-100" ], aria: { current: @status.nil? ? "page" : nil } %>
+  <% Order.statuses.each_key do |status| %>
+    <%= link_to Order.status_name(status), admin_orders_path(status: status), class: [ "rounded-full px-3 py-1", @status == status ? "bg-gray-800 text-white" : "bg-white text-gray-700 hover:bg-gray-100" ], aria: { current: @status == status ? "page" : nil } %>
+  <% end %>
+</nav>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+  <table class="min-w-full text-sm" id="orders">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">เลขที่</th>
+        <th class="px-4 py-2">ผู้ขอเบิก</th>
+        <th class="px-4 py-2">วัตถุประสงค์</th>
+        <th class="px-4 py-2">วันที่ขอเบิก</th>
+        <th class="px-4 py-2">สถานะ</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @orders.each do |order| %>
+        <tr id="<%= dom_id(order) %>">
+          <td class="px-4 py-2"><%= link_to "##{order.id}", admin_order_path(order), class: "text-blue-700 hover:underline" %></td>
+          <td class="px-4 py-2"><%= order.user.name %></td>
+          <td class="px-4 py-2"><%= truncate(order.purpose, length: 60) %></td>
+          <td class="px-4 py-2 whitespace-nowrap"><%= l(order.created_at) %></td>
+          <td class="px-4 py-2"><%= order.status_name %></td>
+        </tr>
+      <% end %>
+      <% if @orders.empty? %>
+        <tr>
+          <td colspan="5" class="px-4 py-6 text-center text-gray-500" id="no_orders">ไม่พบใบเบิก</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

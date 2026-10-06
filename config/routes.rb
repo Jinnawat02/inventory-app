@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :orders, only: %i[index show]
     resources :items, except: :show do
       resource :stock_adjustment, only: %i[new create], module: :items
     end

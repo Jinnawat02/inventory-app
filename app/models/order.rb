@@ -30,6 +30,15 @@ class Order < ApplicationRecord
   validate :lines_editable_only_while_pending, on: :update
 
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
+  scope :admin_queue, -> {
+    order(
+      Arel.sql("CASE WHEN orders.status = 'pending' THEN 0 ELSE 1 END"),
+      Arel.sql("CASE WHEN orders.status = 'pending' THEN orders.created_at END ASC"),
+      created_at: :desc,
+      id: :desc
+    )
+  }
+  scope :with_status, ->(status) { statuses.key?(status.to_s) ? where(status: status) : all }
 
   def can_transition_to?(new_status)
     TRANSITIONS.fetch(status, []).include?(new_status.to_s)
