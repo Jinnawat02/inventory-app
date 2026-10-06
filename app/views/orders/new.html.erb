@@ -1,0 +1,6 @@
+<% content_for :title, "เบิกพัสดุ" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="text-2xl font-bold mb-6">เบิกพัสดุ</h1>
+  <%= render "form", order: @order, items: Item.active.ordered %>
+</div>

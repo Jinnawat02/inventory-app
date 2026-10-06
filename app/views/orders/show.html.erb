@@ -1,0 +1,14 @@
+<% content_for :title, "ใบเบิก ##{@order.id}" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <h1 class="text-2xl font-bold">ใบเบิก #<%= @order.id %></h1>
+      <span id="order_status"><%= @order.status_name %></span>
+    </div>
+
+    <p class="mt-4 text-gray-700 whitespace-pre-line" id="order_purpose"><%= @order.purpose %></p>
+
+    <%= render "orders/lines", order: @order %>
+  </div>
+</div>

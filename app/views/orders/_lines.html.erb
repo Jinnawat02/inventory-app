@@ -1,0 +1,20 @@
+<div class="mt-6 overflow-x-auto">
+  <table class="min-w-full text-sm" id="order_items">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">รหัส</th>
+        <th class="px-4 py-2">พัสดุ</th>
+        <th class="px-4 py-2 text-right">จำนวน</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% order.order_items.includes(:item).each do |line| %>
+        <tr id="<%= dom_id(line) %>">
+          <td class="px-4 py-2 font-mono"><%= line.item.sku %></td>
+          <td class="px-4 py-2"><%= line.item.name %></td>
+          <td class="px-4 py-2 text-right"><%= number_with_delimiter(line.quantity) %> <%= line.item.unit %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

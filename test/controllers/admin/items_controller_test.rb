@@ -84,10 +84,19 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
 
   test "destroy" do
     assert_difference -> { Item.count }, -1 do
+      delete admin_item_path(items(:retired))
+    end
+
+    assert_redirected_to admin_items_path
+  end
+
+  test "destroy refuses items that have been requested" do
+    assert_no_difference -> { Item.count } do
       delete admin_item_path(items(:pen))
     end
 
     assert_redirected_to admin_items_path
+    assert_match "ไม่สามารถลบได้", flash[:alert]
   end
 
   test "users cannot manage items" do

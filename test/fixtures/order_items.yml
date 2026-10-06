@@ -1,0 +1,24 @@
+pending_one_paper:
+  order: pending_one
+  item: paper
+  quantity: 5
+
+pending_one_pen:
+  order: pending_one
+  item: pen
+  quantity: 10
+
+pending_two_toner:
+  order: pending_two
+  item: toner
+  quantity: 1
+
+approved_one_paper:
+  order: approved_one
+  item: paper
+  quantity: 3
+
+rejected_two_pen:
+  order: rejected_two
+  item: pen
+  quantity: 50

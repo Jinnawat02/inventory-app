@@ -3,7 +3,24 @@ th:
     models:
       user: ผู้ใช้
       item: พัสดุ
+      order: ใบเบิก
+      order_item: รายการเบิก
     attributes:
+      order:
+        purpose: วัตถุประสงค์
+        status: สถานะ
+        admin_note: หมายเหตุจากผู้ดูแล
+        order_items: รายการเบิก
+        user: ผู้ขอเบิก
+        decided_by: ผู้พิจารณา
+        decided_at: วันที่พิจารณา
+        fulfilled_at: วันที่จ่ายของ
+      order_item:
+        item: พัสดุ
+        quantity: จำนวน
+      order/order_items:
+        item: พัสดุ
+        quantity: จำนวน
       item:
         name: ชื่อพัสดุ
         sku: รหัสพัสดุ (SKU)
@@ -12,6 +29,7 @@ th:
         quantity: จำนวนคงเหลือ
         low_stock_threshold: จุดแจ้งเตือนสต็อกต่ำ
         active: สถานะการใช้งาน
+        order_items: ใบเบิก
       user:
         name: ชื่อ
         email_address: อีเมล
@@ -19,8 +37,18 @@ th:
         password_confirmation: ยืนยันรหัสผ่าน
         role: บทบาท
         active: สถานะการใช้งาน
+        orders: ใบเบิก
     errors:
       models:
+        order:
+          attributes:
+            order_items:
+              too_short: ต้องมีอย่างน้อย 1 รายการ
+              duplicate_item: มีพัสดุซ้ำกัน กรุณารวมเป็นรายการเดียว
+        order_item:
+          attributes:
+            item:
+              inactive: ถูกปิดใช้งานแล้ว
         user:
           attributes:
             active:
@@ -110,3 +138,10 @@ th:
     roles:
       user: ผู้ใช้
       admin: ผู้ดูแลระบบ
+  orders:
+    statuses:
+      pending: รออนุมัติ
+      approved: อนุมัติแล้ว
+      rejected: ไม่อนุมัติ
+      cancelled: ยกเลิกแล้ว
+      fulfilled: จ่ายของแล้ว

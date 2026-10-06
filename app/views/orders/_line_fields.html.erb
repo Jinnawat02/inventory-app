@@ -1,0 +1,15 @@
+<% removed = line.object.marked_for_destruction? %>
+<div class="flex flex-wrap items-end gap-3" data-nested-form-row data-new-record="<%= line.object.new_record? %>" <%= "hidden" if removed %>>
+  <div class="grow min-w-48">
+    <%= line.label :item_id, "พัสดุ", class: "block text-sm text-gray-600" %>
+    <%= line.select :item_id, items.map { |item| [ "#{item.name} (คงเหลือ #{number_with_delimiter(item.quantity)} #{item.unit})", item.id ] }, { include_blank: "เลือกพัสดุ" }, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="w-28">
+    <%= line.label :quantity, "จำนวน", class: "block text-sm text-gray-600" %>
+    <%= line.number_field :quantity, min: 1, step: 1, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <%= line.hidden_field :_destroy, value: removed ? "1" : "0" %>
+  <button type="button" class="rounded-md px-3 py-2 bg-red-50 text-red-700 hover:bg-red-100 text-sm cursor-pointer" data-action="nested-form#remove">ลบ</button>
+</div>
