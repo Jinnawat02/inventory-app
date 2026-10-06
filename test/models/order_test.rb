@@ -1,6 +1,8 @@
 require "test_helper"
 
 class OrderTest < ActiveSupport::TestCase
+  include ActionMailer::TestHelper
+
   def build_order(lines: [ { item: items(:paper), quantity: 2 } ], **attributes)
     order = users(:one).orders.new({ purpose: "ใช้งานทั่วไป" }.merge(attributes))
     lines.each { |line| order.order_items.build(line) }
@@ -255,5 +257,20 @@ class OrderTest < ActiveSupport::TestCase
       orders(:pending_two).cancel!
       orders(:approved_one).fulfill!
     end
+  end
+
+  test "notifications are enqueued only after the transaction commits" do
+    assert_no_enqueued_emails do
+      Order.transaction do
+        orders(:pending_one).approve!(by: users(:admin))
+        raise ActiveRecord::Rollback
+      end
+    end
+
+    assert orders(:pending_one).reload.pending?
+  end
+
+  test "cancelling does not notify anyone" do
+    assert_no_enqueued_emails { orders(:pending_one).cancel! }
   end
 end

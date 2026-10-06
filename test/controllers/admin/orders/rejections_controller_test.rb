@@ -23,6 +23,7 @@ class Admin::Orders::RejectionsControllerTest < ActionDispatch::IntegrationTest
     orders(:pending_one).reload.then do |order|
       assert order.rejected?
       assert_equal "ยังมีของเหลือในแผนก", order.admin_note
+      assert_enqueued_email_with OrderMailer, :status_changed, args: [ order, "rejected" ]
     end
   end
 

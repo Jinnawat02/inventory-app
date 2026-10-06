@@ -1,0 +1,10 @@
+สวัสดีคุณ<%= @order.user.name %>
+
+ใบเบิก #<%= @order.id %> ของคุณเปลี่ยนสถานะเป็น <%= Order.status_name(@status) %>
+
+วัตถุประสงค์: <%= @order.purpose %>
+<% if @status == "rejected" -%>
+เหตุผลที่ไม่อนุมัติ: <%= @order.admin_note %>
+<% end -%>
+
+เปิดดูใบเบิก: <%= order_url(@order) %>

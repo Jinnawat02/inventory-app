@@ -17,6 +17,8 @@ class Order < ApplicationRecord
     "approved" => %w[fulfilled]
   }.freeze
 
+  OWNER_NOTIFIED_STATUSES = %w[approved rejected fulfilled].freeze
+
   belongs_to :user
   belongs_to :decided_by, class_name: "User", optional: true
   has_many :order_items, -> { order(:id) }, dependent: :destroy, inverse_of: :order
@@ -40,6 +42,9 @@ class Order < ApplicationRecord
   validate :items_listed_once
   validate :status_change_allowed, on: :update, if: :will_save_change_to_status?
   validate :lines_editable_only_while_pending, on: :update
+
+  after_create_commit :notify_admins_of_new_request
+  after_update_commit :notify_owner_of_status_change, if: -> { saved_change_to_status? && status.in?(OWNER_NOTIFIED_STATUSES) }
 
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
   scope :admin_queue, -> {
@@ -92,6 +97,14 @@ class Order < ApplicationRecord
         yield if block_given?
         update!(status: new_status, **attributes)
       end
+    end
+
+    def notify_admins_of_new_request
+      OrderMailer.new_request(self).deliver_later
+    end
+
+    def notify_owner_of_status_change
+      OrderMailer.status_changed(self, status).deliver_later
     end
 
     def deduct_stock!
