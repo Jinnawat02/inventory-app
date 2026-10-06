@@ -15,6 +15,17 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_select "##{dom_id(items(:retired))}", /ปิดใช้งาน/
   end
 
+  test "index searches and filters low stock including inactive items" do
+    get admin_items_path, params: { q: "floppy" }
+    assert_select "#items tbody tr", 1
+    assert_select "##{dom_id(items(:retired))}"
+
+    get admin_items_path, params: { low_stock: "1" }
+    assert_select "##{dom_id(items(:toner))} .low-stock-badge"
+    assert_select "##{dom_id(items(:retired))}"
+    assert_select "##{dom_id(items(:paper))}", 0
+  end
+
   test "new" do
     get new_admin_item_path
 

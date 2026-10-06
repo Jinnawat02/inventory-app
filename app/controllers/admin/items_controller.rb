@@ -1,8 +1,10 @@
 class Admin::ItemsController < Admin::BaseController
+  include ItemFiltering
+
   before_action :set_item, only: %i[edit update destroy]
 
   def index
-    @items = Item.ordered
+    @items = Item.ordered.filter_by(**item_filters)
   end
 
   def new

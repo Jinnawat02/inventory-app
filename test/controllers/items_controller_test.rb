@@ -52,4 +52,36 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     get item_path(items(:paper))
     assert_redirected_to new_session_path
   end
+
+  test "search by name or sku" do
+    get items_path, params: { q: "paper" }
+
+    assert_select "#items tbody tr", 1
+    assert_select "##{dom_id(items(:paper))}"
+
+    get items_path, params: { q: "ปากกา" }
+
+    assert_select "##{dom_id(items(:pen))}"
+    assert_select "##{dom_id(items(:paper))}", 0
+  end
+
+  test "filter low stock items" do
+    get items_path, params: { low_stock: "1" }
+
+    assert_select "#items tbody tr", 1
+    assert_select "##{dom_id(items(:toner))}"
+  end
+
+  test "low stock items show a badge" do
+    get items_path
+
+    assert_select "##{dom_id(items(:toner))} .low-stock-badge", "สต็อกต่ำ"
+    assert_select "##{dom_id(items(:paper))} .low-stock-badge", 0
+  end
+
+  test "shows an empty state when nothing matches" do
+    get items_path, params: { q: "ไม่มีพัสดุนี้" }
+
+    assert_select "#no_items", "ไม่พบพัสดุ"
+  end
 end

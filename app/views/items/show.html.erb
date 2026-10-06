@@ -21,7 +21,10 @@
     <dl class="mt-6 grid grid-cols-2 gap-4 text-sm">
       <div>
         <dt class="text-gray-500">จำนวนคงเหลือ</dt>
-        <dd class="text-lg font-semibold" id="quantity"><%= number_with_delimiter(@item.quantity) %> <%= @item.unit %></dd>
+        <dd class="text-lg font-semibold" id="quantity">
+          <%= number_with_delimiter(@item.quantity) %> <%= @item.unit %>
+          <%= render "items/low_stock_badge", item: @item %>
+        </dd>
       </div>
       <div>
         <dt class="text-gray-500">จุดแจ้งเตือนสต็อกต่ำ</dt>

@@ -59,4 +59,27 @@ class ItemTest < ActiveSupport::TestCase
     assert_includes Item.active, items(:paper)
     assert_not_includes Item.active, items(:retired)
   end
+
+  test "low_stock scope returns items at or below their threshold" do
+    assert_equal [ items(:retired), items(:toner) ].sort_by(&:id), Item.low_stock.sort_by(&:id)
+  end
+
+  test "search matches name" do
+    assert_equal [ items(:paper) ], Item.search("กระดาษ").to_a
+  end
+
+  test "search matches sku case-insensitively" do
+    assert_equal [ items(:pen) ], Item.search("pen-b").to_a
+  end
+
+  test "search treats LIKE wildcards literally" do
+    assert_empty Item.search("%")
+    assert_empty Item.search("_")
+  end
+
+  test "filter_by combines search and low stock" do
+    assert_equal [ items(:toner) ], Item.filter_by(query: "toner", low_stock: true).to_a
+    assert_empty Item.filter_by(query: "paper", low_stock: true)
+    assert_equal Item.count, Item.filter_by.count
+  end
 end

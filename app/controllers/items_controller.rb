@@ -1,6 +1,8 @@
 class ItemsController < ApplicationController
+  include ItemFiltering
+
   def index
-    @items = Item.active.ordered
+    @items = Item.active.ordered.filter_by(**item_filters)
   end
 
   def show

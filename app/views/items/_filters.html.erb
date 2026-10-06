@@ -1,0 +1,11 @@
+<%= form_with url: url, method: :get, class: "flex flex-wrap items-center gap-3 mb-4", data: { turbo_frame: "_top" } do |form| %>
+  <%= form.search_field :q, value: item_filters[:query], placeholder: "ค้นหาชื่อหรือรหัสพัสดุ", class: "shadow-sm rounded-md border border-gray-400 px-3 py-2 w-full sm:w-72" %>
+  <label class="flex items-center gap-2 text-sm">
+    <%= form.check_box :low_stock, { checked: item_filters[:low_stock] }, "1", nil %>
+    เฉพาะสต็อกต่ำ
+  </label>
+  <%= form.submit "ค้นหา", name: nil, class: "rounded-md px-3.5 py-2 bg-gray-800 hover:bg-gray-700 text-white cursor-pointer" %>
+  <% if item_filters[:query] || item_filters[:low_stock] %>
+    <%= link_to "ล้างตัวกรอง", url, class: "text-sm text-gray-600 underline" %>
+  <% end %>
+<% end %>

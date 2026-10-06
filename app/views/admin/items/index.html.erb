@@ -5,6 +5,8 @@
   <%= link_to "เพิ่มพัสดุ", new_admin_item_path, class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
 </div>
 
+<%= render "items/filters", url: admin_items_path %>
+
 <div class="overflow-x-auto bg-white rounded-lg shadow-sm">
   <table class="min-w-full text-sm" id="items">
     <thead class="bg-gray-100 text-left text-gray-600">
@@ -22,7 +24,10 @@
         <tr id="<%= dom_id(item) %>">
           <td class="px-4 py-2 font-mono"><%= item.sku %></td>
           <td class="px-4 py-2"><%= link_to item.name, item, class: "text-blue-700 hover:underline" %></td>
-          <td class="px-4 py-2 text-right"><%= number_with_delimiter(item.quantity) %> <%= item.unit %></td>
+          <td class="px-4 py-2 text-right">
+            <%= number_with_delimiter(item.quantity) %> <%= item.unit %>
+            <%= render "items/low_stock_badge", item: item %>
+          </td>
           <td class="px-4 py-2 text-right"><%= number_with_delimiter(item.low_stock_threshold) %></td>
           <td class="px-4 py-2">
             <% if item.active? %>
@@ -39,6 +44,9 @@
             </div>
           </td>
         </tr>
+      <% end %>
+      <% if @items.empty? %>
+        <%= render "items/empty", colspan: 6 %>
       <% end %>
     </tbody>
   </table>
