@@ -151,7 +151,7 @@ stateDiagram-v2
 - [x] Admins approve / reject (reason required) / fulfill following section 4
 - [x] Approval deducts stock correctly and is refused when stock is insufficient
 - [x] Order page shows status badge and decision/fulfillment timestamps
-- [ ] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
+- [x] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
 
 ### Phase 4 — Email Notifications
 - [ ] `OrderMailer#new_request` goes to all active admins when an order is created
