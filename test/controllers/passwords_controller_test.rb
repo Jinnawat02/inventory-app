@@ -26,6 +26,19 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_notice "ส่งลิงก์ตั้งรหัสผ่านใหม่แล้ว"
   end
 
+  test "create for an inactive user sends no mail" do
+    post passwords_path, params: { email_address: users(:inactive).email_address }
+
+    assert_enqueued_emails 0
+    assert_redirected_to new_session_path
+  end
+
+  test "edit with a token for an inactive user" do
+    get edit_password_path(users(:inactive).password_reset_token)
+
+    assert_redirected_to new_password_path
+  end
+
   test "edit" do
     get edit_password_path(@user.password_reset_token)
     assert_response :success

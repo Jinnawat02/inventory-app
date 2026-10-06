@@ -6,9 +6,13 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
+    user = User.authenticate_by(params.permit(:email_address, :password))
+
+    if user&.active?
       start_new_session_for user
       redirect_to after_authentication_url
+    elsif user
+      redirect_to new_session_path, alert: "บัญชีนี้ถูกระงับการใช้งาน"
     else
       redirect_to new_session_path, alert: "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
     end

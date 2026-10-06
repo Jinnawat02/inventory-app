@@ -1,0 +1,12 @@
+<nav class="bg-white border-b border-gray-200">
+  <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center gap-4">
+      <%= link_to "Inventory App", root_path, class: "text-lg font-bold text-blue-700" %>
+    </div>
+
+    <div class="flex items-center gap-3 text-sm">
+      <span class="text-gray-600" id="current_user"><%= Current.user.name %></span>
+      <%= button_to "ออกจากระบบ", session_path, method: :delete, class: "rounded-md px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer" %>
+    </div>
+  </div>
+</nav>
