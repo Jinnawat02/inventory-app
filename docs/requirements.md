@@ -129,7 +129,7 @@ stateDiagram-v2
 ## 6. Phases and Acceptance Criteria
 
 ### Phase 1 — Setup, Authentication, Roles
-- [ ] Create a Rails 8.1.4 app at the repo root
+- [x] Create a Rails 8.1.4 app at the repo root
 - [ ] Install authentication with the Rails generator and add `name`, `role`, `active` to User
 - [ ] Every page requires sign-in; `active: false` accounts cannot sign in
 - [ ] `require_admin` filter and `Current.user.admin?` work
