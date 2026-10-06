@@ -9,6 +9,7 @@ class Admin::Orders::ApprovalsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_order_path(orders(:pending_one))
     assert orders(:pending_one).reload.approved?
     assert_equal users(:admin), orders(:pending_one).decided_by
+    assert_enqueued_email_with OrderMailer, :status_changed, args: [ orders(:pending_one), "approved" ]
   end
 
   test "cannot approve an order that is not pending" do

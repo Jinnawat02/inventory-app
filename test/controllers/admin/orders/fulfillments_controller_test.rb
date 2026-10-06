@@ -9,6 +9,7 @@ class Admin::Orders::FulfillmentsControllerTest < ActionDispatch::IntegrationTes
     assert_redirected_to admin_order_path(orders(:approved_one))
     assert orders(:approved_one).reload.fulfilled?
     assert orders(:approved_one).fulfilled_at
+    assert_enqueued_email_with OrderMailer, :status_changed, args: [ orders(:approved_one), "fulfilled" ]
   end
 
   test "cannot fulfill a pending order" do

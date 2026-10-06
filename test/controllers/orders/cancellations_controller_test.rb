@@ -4,7 +4,9 @@ class Orders::CancellationsControllerTest < ActionDispatch::IntegrationTest
   setup { sign_in_as users(:one) }
 
   test "cancel my pending order" do
-    post order_cancellation_path(orders(:pending_one))
+    assert_no_enqueued_emails do
+      post order_cancellation_path(orders(:pending_one))
+    end
 
     assert_redirected_to order_path(orders(:pending_one))
     assert orders(:pending_one).reload.cancelled?

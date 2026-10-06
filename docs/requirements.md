@@ -155,7 +155,7 @@ stateDiagram-v2
 
 ### Phase 4 — Email Notifications
 - [x] `OrderMailer#new_request` goes to all active admins when an order is created
-- [ ] `OrderMailer#status_changed` goes to the order owner on `approved` / `rejected` / `fulfilled`
+- [x] `OrderMailer#status_changed` goes to the order owner on `approved` / `rejected` / `fulfilled`
 - [ ] Production SMTP configured from environment variables
 - [ ] Mailer previews for every email
 - [ ] Tests use `assert_enqueued_email_with` for cases that send and `assert_no_enqueued_emails` for cases that must not (e.g. user cancels)

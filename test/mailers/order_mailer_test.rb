@@ -30,4 +30,41 @@ class OrderMailerTest < ActionMailer::TestCase
 
     assert_no_emails { email.deliver_now }
   end
+
+  test "status_changed tells the owner the new status with a link" do
+    order = orders(:approved_one)
+
+    email = OrderMailer.status_changed(order, "approved")
+
+    assert_emails(1) { email.deliver_now }
+    assert_equal [ users(:one).email_address ], email.to
+    assert_equal "ใบเบิก ##{order.id} อนุมัติแล้ว", email.subject
+    [ email.html_part.decoded, email.text_part.decoded ].each do |body|
+      assert_includes body, "อนุมัติแล้ว"
+      assert_includes body, "http://example.com/orders/#{order.id}"
+      assert_not_includes body, "เหตุผลที่ไม่อนุมัติ"
+    end
+  end
+
+  test "status_changed includes the reason when rejected" do
+    order = orders(:rejected_two)
+
+    email = OrderMailer.status_changed(order, "rejected")
+
+    assert_equal [ users(:two).email_address ], email.to
+    assert_equal "ใบเบิก ##{order.id} ไม่อนุมัติ", email.subject
+    [ email.html_part.decoded, email.text_part.decoded ].each do |body|
+      assert_includes body, "เหตุผลที่ไม่อนุมัติ"
+      assert_includes body, "เบิกเกินความจำเป็น"
+    end
+  end
+
+  test "status_changed uses the status it was sent for" do
+    order = orders(:approved_one)
+    order.fulfill!
+
+    email = OrderMailer.status_changed(order, "approved")
+
+    assert_equal "ใบเบิก ##{order.id} อนุมัติแล้ว", email.subject
+  end
 end
