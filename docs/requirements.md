@@ -130,7 +130,7 @@ stateDiagram-v2
 
 ### Phase 1 — Setup, Authentication, Roles
 - [x] Create a Rails 8.1.4 app at the repo root
-- [ ] Install authentication with the Rails generator and add `name`, `role`, `active` to User
+- [x] Install authentication with the Rails generator and add `name`, `role`, `active` to User
 - [ ] Every page requires sign-in; `active: false` accounts cannot sign in
 - [ ] `require_admin` filter and `Current.user.admin?` work
 - [ ] Admins manage users (list / create / edit role / deactivate) and cannot deactivate themselves

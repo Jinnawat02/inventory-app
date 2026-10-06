@@ -1,0 +1,26 @@
+<% password_digest = BCrypt::Password.create("password") %>
+
+admin:
+  name: ผู้ดูแลระบบ
+  email_address: admin@example.com
+  password_digest: <%= password_digest %>
+  role: admin
+
+one:
+  name: สมชาย ใจดี
+  email_address: one@example.com
+  password_digest: <%= password_digest %>
+  role: user
+
+two:
+  name: สมหญิง รักงาน
+  email_address: two@example.com
+  password_digest: <%= password_digest %>
+  role: user
+
+inactive:
+  name: ผู้ใช้ที่ถูกระงับ
+  email_address: inactive@example.com
+  password_digest: <%= password_digest %>
+  role: user
+  active: false
