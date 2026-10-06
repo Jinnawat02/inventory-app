@@ -1,13 +1,5 @@
 <%= form_with model: [ :admin, user ], class: "space-y-5 bg-white rounded-lg shadow-sm p-6" do |form| %>
-  <% if user.errors.any? %>
-    <div class="py-2 px-3 bg-red-50 text-red-600 rounded-lg" id="error_explanation">
-      <ul class="list-disc list-inside">
-        <% user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render "shared/form_errors", record: user %>
 
   <div>
     <%= form.label :name, class: "block font-medium" %>

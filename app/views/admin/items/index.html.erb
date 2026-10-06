@@ -1,0 +1,53 @@
+<% content_for :title, "จัดการพัสดุ" %>
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+  <h1 class="text-2xl font-bold">จัดการพัสดุ</h1>
+  <%= link_to "เพิ่มพัสดุ", new_admin_item_path, class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+</div>
+
+<%= render "items/filters", url: admin_items_path %>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+  <table class="min-w-full text-sm" id="items">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">รหัส</th>
+        <th class="px-4 py-2">ชื่อพัสดุ</th>
+        <th class="px-4 py-2 text-right">คงเหลือ</th>
+        <th class="px-4 py-2 text-right">จุดแจ้งเตือน</th>
+        <th class="px-4 py-2">สถานะ</th>
+        <th class="px-4 py-2"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @items.each do |item| %>
+        <tr id="<%= dom_id(item) %>">
+          <td class="px-4 py-2 font-mono"><%= item.sku %></td>
+          <td class="px-4 py-2"><%= link_to item.name, item, class: "text-blue-700 hover:underline" %></td>
+          <td class="px-4 py-2 text-right">
+            <%= number_with_delimiter(item.quantity) %> <%= item.unit %>
+            <%= render "items/low_stock_badge", item: item %>
+          </td>
+          <td class="px-4 py-2 text-right"><%= number_with_delimiter(item.low_stock_threshold) %></td>
+          <td class="px-4 py-2">
+            <% if item.active? %>
+              <span class="rounded-full px-2 py-0.5 bg-green-100 text-green-700">ใช้งาน</span>
+            <% else %>
+              <span class="rounded-full px-2 py-0.5 bg-gray-200 text-gray-600">ปิดใช้งาน</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-2">
+            <div class="flex flex-wrap justify-end gap-2">
+              <%= link_to "ปรับสต็อก", new_admin_item_stock_adjustment_path(item), class: "rounded-md px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100" %>
+              <%= link_to "แก้ไข", edit_admin_item_path(item), class: "rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200" %>
+              <%= button_to "ลบ", admin_item_path(item), method: :delete, class: "rounded-md px-3 py-1 bg-red-50 text-red-700 hover:bg-red-100 cursor-pointer", data: { turbo_confirm: "ยืนยันการลบ #{item.name}?" } %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      <% if @items.empty? %>
+        <%= render "items/empty", colspan: 6 %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

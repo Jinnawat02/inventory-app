@@ -2,7 +2,16 @@ th:
   activerecord:
     models:
       user: ผู้ใช้
+      item: พัสดุ
     attributes:
+      item:
+        name: ชื่อพัสดุ
+        sku: รหัสพัสดุ (SKU)
+        description: รายละเอียด
+        unit: หน่วยนับ
+        quantity: จำนวนคงเหลือ
+        low_stock_threshold: จุดแจ้งเตือนสต็อกต่ำ
+        active: สถานะการใช้งาน
       user:
         name: ชื่อ
         email_address: อีเมล
@@ -21,6 +30,16 @@ th:
         restrict_dependent_destroy:
           has_one: "ไม่สามารถลบได้เนื่องจากมี%{record}ที่เกี่ยวข้องอยู่"
           has_many: "ไม่สามารถลบได้เนื่องจากมี%{record}ที่เกี่ยวข้องอยู่"
+  activemodel:
+    attributes:
+      stock_adjustment:
+        change: จำนวนที่ปรับ
+    errors:
+      models:
+        stock_adjustment:
+          attributes:
+            change:
+              insufficient_stock: ทำให้จำนวนคงเหลือติดลบ
   errors:
     format: "%{attribute}%{message}"
     messages:

@@ -1,0 +1,32 @@
+<% content_for :title, "รายการพัสดุ" %>
+
+<h1 class="text-2xl font-bold mb-6">รายการพัสดุ</h1>
+
+<%= render "items/filters", url: items_path %>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+  <table class="min-w-full text-sm" id="items">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">รหัส</th>
+        <th class="px-4 py-2">ชื่อพัสดุ</th>
+        <th class="px-4 py-2 text-right">คงเหลือ</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @items.each do |item| %>
+        <tr id="<%= dom_id(item) %>">
+          <td class="px-4 py-2 font-mono"><%= item.sku %></td>
+          <td class="px-4 py-2"><%= link_to item.name, item, class: "text-blue-700 hover:underline" %></td>
+          <td class="px-4 py-2 text-right">
+            <%= number_with_delimiter(item.quantity) %> <%= item.unit %>
+            <%= render "items/low_stock_badge", item: item %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @items.empty? %>
+        <%= render "items/empty", colspan: 3 %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

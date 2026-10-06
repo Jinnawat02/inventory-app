@@ -138,11 +138,11 @@ stateDiagram-v2
 - [x] Tests cover sign-in, admin authorization, and deactivation
 
 ### Phase 2 — Items
-- [ ] Admin: item CRUD and stock adjustment
-- [ ] User: read-only item list and detail
-- [ ] Search by name or SKU, filter "low stock"; badge for low-stock items
-- [ ] Seed 10 sample items
-- [ ] Tests cover validations, authorization, and search
+- [x] Admin: item CRUD and stock adjustment
+- [x] User: read-only item list and detail
+- [x] Search by name or SKU, filter "low stock"; badge for low-stock items
+- [x] Seed 10 sample items
+- [x] Tests cover validations, authorization, and search
 
 ### Phase 3 — Orders
 - [ ] Users create an order with multiple lines in one form (add/remove rows with Stimulus, `accepts_nested_attributes_for`)

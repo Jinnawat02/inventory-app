@@ -32,11 +32,24 @@ class SeedsTest < ActiveSupport::TestCase
     assert users.all? { |user| user.authenticate("fake-user-password") }
   end
 
+  test "creates 10 sample items" do
+    Item.delete_all
+
+    with_env(SEED_ENV) do
+      assert_difference -> { Item.count }, 10 do
+        Rails.application.load_seed
+      end
+    end
+
+    assert Item.all.all?(&:valid?)
+    assert Item.low_stock.exists?
+  end
+
   test "is idempotent" do
     with_env(SEED_ENV) do
       Rails.application.load_seed
 
-      assert_no_difference -> { User.count } do
+      assert_no_difference [ -> { User.count }, -> { Item.count } ] do
         Rails.application.load_seed
       end
     end

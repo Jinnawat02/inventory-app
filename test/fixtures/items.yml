@@ -1,0 +1,29 @@
+paper:
+  name: กระดาษ A4
+  sku: PAPER-A4
+  description: กระดาษถ่ายเอกสาร 80 แกรม
+  unit: รีม
+  quantity: 50
+  low_stock_threshold: 10
+
+pen:
+  name: ปากกาลูกลื่น สีน้ำเงิน
+  sku: PEN-BLUE
+  unit: ด้าม
+  quantity: 120
+  low_stock_threshold: 20
+
+toner:
+  name: ผงหมึกเครื่องพิมพ์
+  sku: TONER-01
+  unit: กล่อง
+  quantity: 2
+  low_stock_threshold: 3
+
+retired:
+  name: แผ่นดิสก์
+  sku: FLOPPY-1
+  unit: แผ่น
+  quantity: 0
+  low_stock_threshold: 0
+  active: false

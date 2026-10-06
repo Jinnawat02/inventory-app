@@ -1,0 +1,50 @@
+<%= form_with model: [ :admin, item ], class: "space-y-5 bg-white rounded-lg shadow-sm p-6" do |form| %>
+  <%= render "shared/form_errors", record: item %>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= form.label :name, class: "block font-medium" %>
+      <%= form.text_field :name, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    </div>
+
+    <div>
+      <%= form.label :sku, class: "block font-medium" %>
+      <%= form.text_field :sku, required: true, pattern: "[A-Za-z0-9\\-]+", class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full font-mono uppercase" %>
+      <p class="text-sm text-gray-500 mt-1">ใช้ได้เฉพาะ A-Z, 0-9 และ -</p>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :description, class: "block font-medium" %>
+    <%= form.text_area :description, rows: 3, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-3">
+    <div>
+      <%= form.label :unit, class: "block font-medium" %>
+      <%= form.text_field :unit, required: true, placeholder: "เช่น ชิ้น, กล่อง, รีม", class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    </div>
+
+    <% if item.new_record? %>
+      <div>
+        <%= form.label :quantity, class: "block font-medium" %>
+        <%= form.number_field :quantity, min: 0, step: 1, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :low_stock_threshold, class: "block font-medium" %>
+      <%= form.number_field :low_stock_threshold, min: 0, step: 1, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <%= form.check_box :active, class: "h-4 w-4" %>
+    <%= form.label :active, "เปิดใช้งาน (แสดงในฟอร์มเบิก)" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= form.submit "บันทึก", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+    <%= link_to "ยกเลิก", admin_items_path, class: "text-gray-600 underline" %>
+  </div>
+<% end %>
