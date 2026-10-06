@@ -138,7 +138,7 @@ stateDiagram-v2
 - [x] Tests cover sign-in, admin authorization, and deactivation
 
 ### Phase 2 — Items
-- [ ] Admin: item CRUD and stock adjustment
+- [x] Admin: item CRUD and stock adjustment
 - [ ] User: read-only item list and detail
 - [ ] Search by name or SKU, filter "low stock"; badge for low-stock items
 - [ ] Seed 10 sample items

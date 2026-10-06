@@ -13,6 +13,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   namespace :admin do
+    resources :items, except: :show do
+      resource :stock_adjustment, only: %i[new create], module: :items
+    end
     resources :users, except: %i[show destroy] do
       resource :activation, only: %i[create destroy], module: :users
     end
