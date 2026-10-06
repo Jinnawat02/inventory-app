@@ -33,6 +33,8 @@ class SeedsTest < ActiveSupport::TestCase
   end
 
   test "creates 10 sample items" do
+    OrderItem.delete_all
+    Order.delete_all
     Item.delete_all
 
     with_env(SEED_ENV) do

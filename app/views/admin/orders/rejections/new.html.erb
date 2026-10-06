@@ -1,0 +1,21 @@
+<% content_for :title, "ไม่อนุมัติใบเบิก ##{@order.id}" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <%= link_to "← ใบเบิก ##{@order.id}", admin_order_path(@order), class: "text-sm text-gray-600 hover:underline" %>
+
+  <h1 class="text-2xl font-bold mt-4 mb-6">ไม่อนุมัติใบเบิก #<%= @order.id %></h1>
+
+  <%= form_with model: @order, url: admin_order_rejection_path(@order), method: :post, class: "space-y-5 bg-white rounded-lg shadow-sm p-6" do |form| %>
+    <%= render "shared/form_errors", record: @order %>
+
+    <div>
+      <%= form.label :admin_note, "เหตุผลที่ไม่อนุมัติ", class: "block font-medium" %>
+      <%= form.text_area :admin_note, rows: 4, required: true, autofocus: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= form.submit "ยืนยันไม่อนุมัติ", class: "rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer" %>
+      <%= link_to "ยกเลิก", admin_order_path(@order), class: "text-gray-600 underline" %>
+    </div>
+  <% end %>
+</div>

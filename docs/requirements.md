@@ -145,13 +145,13 @@ stateDiagram-v2
 - [x] Tests cover validations, authorization, and search
 
 ### Phase 3 — Orders
-- [ ] Users create an order with multiple lines in one form (add/remove rows with Stimulus, `accepts_nested_attributes_for`)
-- [ ] Users see only their own orders and can cancel only `pending` ones
-- [ ] Admins see all orders, filter by status, oldest `pending` first
-- [ ] Admins approve / reject (reason required) / fulfill following section 4
-- [ ] Approval deducts stock correctly and is refused when stock is insufficient
-- [ ] Order page shows status badge and decision/fulfillment timestamps
-- [ ] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
+- [x] Users create an order with multiple lines in one form (add/remove rows with Stimulus, `accepts_nested_attributes_for`)
+- [x] Users see only their own orders and can cancel only `pending` ones
+- [x] Admins see all orders, filter by status, oldest `pending` first
+- [x] Admins approve / reject (reason required) / fulfill following section 4
+- [x] Approval deducts stock correctly and is refused when stock is insufficient
+- [x] Order page shows status badge and decision/fulfillment timestamps
+- [x] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
 
 ### Phase 4 — Email Notifications
 - [ ] `OrderMailer#new_request` goes to all active admins when an order is created

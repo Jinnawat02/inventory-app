@@ -1,0 +1,34 @@
+<% content_for :title, "ใบเบิกของฉัน" %>
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+  <h1 class="text-2xl font-bold">ใบเบิกของฉัน</h1>
+  <%= link_to "เบิกพัสดุ", new_order_path, class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+</div>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+  <table class="min-w-full text-sm" id="orders">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">เลขที่</th>
+        <th class="px-4 py-2">วัตถุประสงค์</th>
+        <th class="px-4 py-2">วันที่ขอเบิก</th>
+        <th class="px-4 py-2">สถานะ</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @orders.each do |order| %>
+        <tr id="<%= dom_id(order) %>">
+          <td class="px-4 py-2"><%= link_to "##{order.id}", order, class: "text-blue-700 hover:underline" %></td>
+          <td class="px-4 py-2"><%= truncate(order.purpose, length: 60) %></td>
+          <td class="px-4 py-2 whitespace-nowrap"><%= l(order.created_at) %></td>
+          <td class="px-4 py-2"><%= order_status_badge(order) %></td>
+        </tr>
+      <% end %>
+      <% if @orders.empty? %>
+        <tr>
+          <td colspan="4" class="px-4 py-6 text-center text-gray-500" id="no_orders">ยังไม่มีใบเบิก</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

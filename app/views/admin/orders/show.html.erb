@@ -1,0 +1,40 @@
+<% content_for :title, "ใบเบิก ##{@order.id}" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <%= link_to "← ใบเบิกทั้งหมด", admin_orders_path, class: "text-sm text-gray-600 hover:underline" %>
+
+  <div class="mt-4 bg-white rounded-lg shadow-sm p-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold">ใบเบิก #<%= @order.id %></h1>
+        <p class="text-sm text-gray-600" id="order_requester">ผู้ขอเบิก: <%= @order.user.name %> (<%= @order.user.email_address %>)</p>
+      </div>
+      <span id="order_status"><%= order_status_badge(@order) %></span>
+    </div>
+
+    <p class="mt-4 text-gray-700 whitespace-pre-line" id="order_purpose"><%= @order.purpose %></p>
+
+    <%= render "orders/timeline", order: @order %>
+
+    <%= render "orders/lines", order: @order, show_stock: @order.pending? %>
+
+    <% if @order.rejected? %>
+      <div class="mt-6 py-2 px-3 bg-red-50 text-red-700 rounded-lg" id="admin_note">
+        <p class="font-medium">เหตุผลที่ไม่อนุมัติ</p>
+        <p class="whitespace-pre-line"><%= @order.admin_note %></p>
+      </div>
+    <% end %>
+
+    <div class="mt-6 flex flex-wrap gap-2" id="admin_actions">
+      <% if @order.can_transition_to?(:approved) %>
+        <%= button_to "อนุมัติ", admin_order_approval_path(@order), class: "rounded-md px-3.5 py-2 bg-green-600 hover:bg-green-500 text-white font-medium cursor-pointer", data: { turbo_confirm: "ยืนยันการอนุมัติใบเบิก ##{@order.id}?" } %>
+      <% end %>
+      <% if @order.can_transition_to?(:rejected) %>
+        <%= link_to "ไม่อนุมัติ", new_admin_order_rejection_path(@order), class: "rounded-md px-3.5 py-2 bg-red-50 text-red-700 hover:bg-red-100 font-medium" %>
+      <% end %>
+      <% if @order.can_transition_to?(:fulfilled) %>
+        <%= button_to "จ่ายของแล้ว", admin_order_fulfillment_path(@order), class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer", data: { turbo_confirm: "ยืนยันว่าได้ส่งมอบพัสดุแล้ว?" } %>
+      <% end %>
+    </div>
+  </div>
+</div>

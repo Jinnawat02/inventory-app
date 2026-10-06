@@ -1,6 +1,9 @@
 class Item < ApplicationRecord
   SKU_FORMAT = /\A[A-Z0-9-]+\z/
 
+  has_many :order_items, dependent: :restrict_with_error
+  has_many :orders, through: :order_items
+
   scope :active, -> { where(active: true) }
   scope :ordered, -> { order(:name) }
   scope :low_stock, -> { where(arel_table[:quantity].lteq(arel_table[:low_stock_threshold])) }

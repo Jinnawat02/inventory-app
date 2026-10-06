@@ -82,4 +82,16 @@ class ItemTest < ActiveSupport::TestCase
     assert_empty Item.filter_by(query: "paper", low_stock: true)
     assert_equal Item.count, Item.filter_by.count
   end
+
+  test "an item that has been requested cannot be deleted" do
+    item = items(:paper)
+
+    assert_not item.destroy
+    assert_match "ไม่สามารถลบได้", item.errors[:base].to_sentence
+    assert Item.exists?(item.id)
+  end
+
+  test "an item that was never requested can be deleted" do
+    assert items(:retired).destroy
+  end
 end
