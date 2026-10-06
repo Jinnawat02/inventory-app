@@ -41,4 +41,20 @@ class Admin::Items::StockAdjustmentsControllerTest < ActionDispatch::Integration
     assert_redirected_to root_path
     assert_equal 50, items(:paper).reload.quantity
   end
+
+  test "rejects a zero or non-integer change" do
+    post admin_item_stock_adjustment_path(items(:paper)), params: { stock_adjustment: { change: "0" } }
+    assert_response :unprocessable_entity
+
+    post admin_item_stock_adjustment_path(items(:paper)), params: { stock_adjustment: { change: "2.5" } }
+    assert_response :unprocessable_entity
+
+    assert_equal 50, items(:paper).reload.quantity
+  end
+
+  test "unknown item returns not found" do
+    get new_admin_item_stock_adjustment_path(item_id: 0)
+
+    assert_response :not_found
+  end
 end

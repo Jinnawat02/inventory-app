@@ -84,4 +84,10 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "#no_items", "ไม่พบพัสดุ"
   end
+
+  test "unknown item returns not found" do
+    get item_path(id: 0)
+
+    assert_response :not_found
+  end
 end

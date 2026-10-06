@@ -117,4 +117,20 @@ class Admin::ItemsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to root_path
   end
+
+  test "unknown item returns not found" do
+    get edit_admin_item_path(id: 0)
+
+    assert_response :not_found
+  end
+
+  test "signed out visitors are asked to sign in" do
+    sign_out
+
+    get admin_items_path
+    assert_redirected_to new_session_path
+
+    post admin_items_path, params: valid_params
+    assert_redirected_to new_session_path
+  end
 end
