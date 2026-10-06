@@ -62,4 +62,34 @@ class UserTest < ActiveSupport::TestCase
       users(:one).update_column(:role, "superuser")
     end
   end
+
+  test "role_name is translated" do
+    assert_equal "ผู้ดูแลระบบ", users(:admin).role_name
+    assert_equal "ผู้ใช้", users(:one).role_name
+  end
+
+  test "cannot deactivate the current user" do
+    Current.session = users(:admin).sessions.create!
+
+    admin = users(:admin)
+    assert_not admin.update(active: false)
+    assert admin.errors.added?(:active, :cannot_deactivate_self)
+    assert admin.reload.active?
+  end
+
+  test "can deactivate another user" do
+    Current.session = users(:admin).sessions.create!
+
+    assert users(:one).update(active: false)
+    assert_not users(:one).reload.active?
+  end
+
+  test "deactivating a user ends their sessions" do
+    user = users(:one)
+    user.sessions.create!
+
+    assert_difference -> { user.sessions.count }, -1 do
+      user.update!(active: false)
+    end
+  end
 end

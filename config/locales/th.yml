@@ -11,6 +11,11 @@ th:
         role: บทบาท
         active: สถานะการใช้งาน
     errors:
+      models:
+        user:
+          attributes:
+            active:
+              cannot_deactivate_self: ไม่สามารถระงับบัญชีของตนเองได้
       messages:
         record_invalid: "ข้อมูลไม่ถูกต้อง: %{errors}"
         restrict_dependent_destroy:
@@ -82,3 +87,7 @@ th:
       last_word_connector: " และ "
       two_words_connector: " และ "
       words_connector: ", "
+  users:
+    roles:
+      user: ผู้ใช้
+      admin: ผู้ดูแลระบบ

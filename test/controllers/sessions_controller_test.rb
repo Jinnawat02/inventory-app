@@ -38,7 +38,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :success
 
-    @user.update!(active: false)
+    @user.update_column(:active, false)
     get root_path
 
     assert_redirected_to new_session_path

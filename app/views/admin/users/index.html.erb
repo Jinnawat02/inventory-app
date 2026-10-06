@@ -1,0 +1,48 @@
+<% content_for :title, "จัดการผู้ใช้" %>
+
+<div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+  <h1 class="text-2xl font-bold">จัดการผู้ใช้</h1>
+  <%= link_to "เพิ่มผู้ใช้", new_admin_user_path, class: "rounded-md px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+</div>
+
+<div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+  <table class="min-w-full text-sm" id="users">
+    <thead class="bg-gray-100 text-left text-gray-600">
+      <tr>
+        <th class="px-4 py-2">ชื่อ</th>
+        <th class="px-4 py-2">อีเมล</th>
+        <th class="px-4 py-2">บทบาท</th>
+        <th class="px-4 py-2">สถานะ</th>
+        <th class="px-4 py-2"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      <% @users.each do |user| %>
+        <tr id="<%= dom_id(user) %>">
+          <td class="px-4 py-2"><%= user.name %></td>
+          <td class="px-4 py-2"><%= user.email_address %></td>
+          <td class="px-4 py-2"><%= user.role_name %></td>
+          <td class="px-4 py-2">
+            <% if user.active? %>
+              <span class="rounded-full px-2 py-0.5 bg-green-100 text-green-700">ใช้งาน</span>
+            <% else %>
+              <span class="rounded-full px-2 py-0.5 bg-gray-200 text-gray-600">ระงับ</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-2">
+            <div class="flex flex-wrap justify-end gap-2">
+              <%= link_to "แก้ไข", edit_admin_user_path(user), class: "rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200" %>
+              <% if user != Current.user %>
+                <% if user.active? %>
+                  <%= button_to "ระงับการใช้งาน", admin_user_activation_path(user), method: :delete, class: "rounded-md px-3 py-1 bg-red-50 text-red-700 hover:bg-red-100 cursor-pointer", data: { turbo_confirm: "ยืนยันการระงับบัญชี #{user.name}?" } %>
+                <% else %>
+                  <%= button_to "เปิดใช้งาน", admin_user_activation_path(user), method: :post, class: "rounded-md px-3 py-1 bg-green-50 text-green-700 hover:bg-green-100 cursor-pointer" %>
+                <% end %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
