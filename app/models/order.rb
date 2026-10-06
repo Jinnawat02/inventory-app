@@ -41,6 +41,8 @@ class Order < ApplicationRecord
   validate :status_change_allowed, on: :update, if: :will_save_change_to_status?
   validate :lines_editable_only_while_pending, on: :update
 
+  after_create_commit :notify_admins_of_new_request
+
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
   scope :admin_queue, -> {
     order(
@@ -92,6 +94,10 @@ class Order < ApplicationRecord
         yield if block_given?
         update!(status: new_status, **attributes)
       end
+    end
+
+    def notify_admins_of_new_request
+      OrderMailer.new_request(self).deliver_later
     end
 
     def deduct_stock!

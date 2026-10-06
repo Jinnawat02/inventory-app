@@ -23,6 +23,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
     order = Order.last
     assert_redirected_to order_path(order)
+    assert_enqueued_email_with OrderMailer, :new_request, args: [ order ]
     assert_equal users(:one), order.user
     assert order.pending?
     assert_equal({ items(:paper).id => 2, items(:pen).id => 5 }, order.order_items.to_h { |line| [ line.item_id, line.quantity ] })
@@ -39,6 +40,10 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create without lines re-renders the form" do
+    assert_no_enqueued_emails do
+      post orders_path, params: { order: { purpose: "ทดสอบ", order_items_attributes: { "0" => { item_id: "", quantity: "" } } } }
+    end
+
     assert_no_difference -> { Order.count } do
       post orders_path, params: { order: { purpose: "ทดสอบ", order_items_attributes: { "0" => { item_id: "", quantity: "" } } } }
     end

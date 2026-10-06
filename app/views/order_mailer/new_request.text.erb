@@ -1,0 +1,12 @@
+มีใบเบิกใหม่รอการพิจารณา
+
+เลขที่: #<%= @order.id %>
+ผู้ขอเบิก: <%= @order.user.name %> (<%= @order.user.email_address %>)
+วัตถุประสงค์: <%= @order.purpose %>
+
+รายการ:
+<% @order.order_items.includes(:item).each do |line| -%>
+- <%= line.item.name %> (<%= line.item.sku %>): <%= line.quantity %> <%= line.item.unit %>
+<% end -%>
+
+เปิดดูใบเบิก: <%= admin_order_url(@order) %>

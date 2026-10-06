@@ -1,0 +1,26 @@
+<p>มีใบเบิกใหม่รอการพิจารณา</p>
+
+<p>
+  <strong>เลขที่:</strong> #<%= @order.id %><br>
+  <strong>ผู้ขอเบิก:</strong> <%= @order.user.name %> (<%= @order.user.email_address %>)<br>
+  <strong>วัตถุประสงค์:</strong> <%= @order.purpose %>
+</p>
+
+<table cellpadding="6" cellspacing="0" border="1" style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th align="left">พัสดุ</th>
+      <th align="right">จำนวน</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.includes(:item).each do |line| %>
+      <tr>
+        <td><%= line.item.name %> (<%= line.item.sku %>)</td>
+        <td align="right"><%= line.quantity %> <%= line.item.unit %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><%= link_to "เปิดดูใบเบิก ##{@order.id}", admin_order_url(@order) %></p>
