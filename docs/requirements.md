@@ -141,7 +141,7 @@ stateDiagram-v2
 - [x] Admin: item CRUD and stock adjustment
 - [x] User: read-only item list and detail
 - [x] Search by name or SKU, filter "low stock"; badge for low-stock items
-- [ ] Seed 10 sample items
+- [x] Seed 10 sample items
 - [ ] Tests cover validations, authorization, and search
 
 ### Phase 3 — Orders
