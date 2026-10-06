@@ -27,4 +27,22 @@ class Admin::Orders::ApprovalsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert orders(:pending_one).reload.pending?
   end
+
+  test "approval deducts stock" do
+    assert_difference -> { items(:paper).reload.quantity }, -5 do
+      post admin_order_approval_path(orders(:pending_one))
+    end
+  end
+
+  test "approval is refused when stock is insufficient and lists the short items" do
+    order_items(:pending_two_toner).update!(quantity: 3)
+
+    assert_no_difference -> { items(:toner).reload.quantity } do
+      post admin_order_approval_path(orders(:pending_two))
+    end
+
+    assert_redirected_to admin_order_path(orders(:pending_two))
+    assert_equal "อนุมัติไม่ได้ สต็อกไม่พอ: ผงหมึกเครื่องพิมพ์ (ขอ 3 คงเหลือ 2 กล่อง)", flash[:alert]
+    assert orders(:pending_two).reload.pending?
+  end
 end

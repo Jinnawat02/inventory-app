@@ -1,6 +1,17 @@
 class Order < ApplicationRecord
   class InvalidTransition < StandardError; end
 
+  Shortage = Data.define(:item, :requested, :available)
+
+  class InsufficientStock < StandardError
+    attr_reader :shortages
+
+    def initialize(shortages)
+      @shortages = shortages
+      super("insufficient stock for #{shortages.map { |shortage| shortage.item.sku }.join(", ")}")
+    end
+  end
+
   TRANSITIONS = {
     "pending" => %w[approved rejected cancelled],
     "approved" => %w[fulfilled]
@@ -50,7 +61,7 @@ class Order < ApplicationRecord
   end
 
   def approve!(by:)
-    transition_to!(:approved, decided_by: by, decided_at: Time.current)
+    transition_to!(:approved, decided_by: by, decided_at: Time.current) { deduct_stock! }
   end
 
   def reject!(by:, note:)
@@ -78,7 +89,24 @@ class Order < ApplicationRecord
       with_lock do
         raise InvalidTransition, "cannot change order #{id} from #{status} to #{new_status}" unless can_transition_to?(new_status)
 
+        yield if block_given?
         update!(status: new_status, **attributes)
+      end
+    end
+
+    def deduct_stock!
+      lines = order_items.to_a
+      locked_items = Item.where(id: lines.map(&:item_id)).order(:id).lock.index_by(&:id)
+
+      shortages = lines.filter_map do |line|
+        item = locked_items.fetch(line.item_id)
+        Shortage.new(item: item, requested: line.quantity, available: item.quantity) if item.quantity < line.quantity
+      end
+      raise InsufficientStock.new(shortages) if shortages.any?
+
+      lines.each do |line|
+        item = locked_items.fetch(line.item_id)
+        item.update!(quantity: item.quantity - line.quantity)
       end
     end
 

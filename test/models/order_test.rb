@@ -200,4 +200,60 @@ class OrderTest < ActiveSupport::TestCase
     assert_raises(Order::InvalidTransition) { stale.approve!(by: users(:admin)) }
     assert Order.find(stale.id).rejected?
   end
+
+  test "approve! deducts stock for every line" do
+    assert_difference -> { items(:paper).reload.quantity } => -5, -> { items(:pen).reload.quantity } => -10 do
+      orders(:pending_one).approve!(by: users(:admin))
+    end
+  end
+
+  test "approve! allows taking the exact remaining stock" do
+    order_items(:pending_one_paper).update!(quantity: 50)
+
+    orders(:pending_one).approve!(by: users(:admin))
+
+    assert_equal 0, items(:paper).reload.quantity
+  end
+
+  test "approve! refuses the whole order when any line is short" do
+    order_items(:pending_one_pen).update!(quantity: 121)
+
+    error = assert_raises(Order::InsufficientStock) { orders(:pending_one).approve!(by: users(:admin)) }
+
+    assert_equal [ items(:pen) ], error.shortages.map(&:item)
+    assert_equal 121, error.shortages.first.requested
+    assert_equal 120, error.shortages.first.available
+    assert orders(:pending_one).reload.pending?
+    assert_nil orders(:pending_one).decided_by
+    assert_equal 50, items(:paper).reload.quantity
+    assert_equal 120, items(:pen).reload.quantity
+  end
+
+  test "approve! lists every short line" do
+    order_items(:pending_one_paper).update!(quantity: 51)
+    order_items(:pending_one_pen).update!(quantity: 121)
+
+    error = assert_raises(Order::InsufficientStock) { orders(:pending_one).approve!(by: users(:admin)) }
+
+    assert_equal [ items(:paper), items(:pen) ].sort_by(&:id), error.shortages.map(&:item).sort_by(&:id)
+  end
+
+  test "approving two orders for the same item cannot oversell" do
+    order_items(:pending_one_paper).update!(quantity: 30)
+    second = users(:two).orders.create!(purpose: "แข่งเบิก", order_items_attributes: [ { item_id: items(:paper).id, quantity: 30 } ])
+
+    orders(:pending_one).approve!(by: users(:admin))
+
+    assert_raises(Order::InsufficientStock) { second.approve!(by: users(:admin)) }
+    assert_equal 20, items(:paper).reload.quantity
+    assert second.reload.pending?
+  end
+
+  test "rejecting, cancelling and fulfilling do not touch stock" do
+    assert_no_difference -> { Item.sum(:quantity) } do
+      orders(:pending_one).reject!(by: users(:admin), note: "ไม่จำเป็น")
+      orders(:pending_two).cancel!
+      orders(:approved_one).fulfill!
+    end
+  end
 end

@@ -70,4 +70,12 @@ class Admin::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_select "#admin_actions *", 0
     assert_select "#admin_note", /เบิกเกินความจำเป็น/
   end
+
+  test "show highlights lines without enough stock while pending" do
+    order_items(:pending_two_toner).update!(quantity: 3)
+
+    get admin_order_path(orders(:pending_two))
+
+    assert_select "##{dom_id(order_items(:pending_two_toner))} .stock-short", /2/
+  end
 end

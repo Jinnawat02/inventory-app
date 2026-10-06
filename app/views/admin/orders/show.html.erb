@@ -14,7 +14,7 @@
 
     <p class="mt-4 text-gray-700 whitespace-pre-line" id="order_purpose"><%= @order.purpose %></p>
 
-    <%= render "orders/lines", order: @order %>
+    <%= render "orders/lines", order: @order, show_stock: @order.pending? %>
 
     <% if @order.rejected? %>
       <div class="mt-6 py-2 px-3 bg-red-50 text-red-700 rounded-lg" id="admin_note">

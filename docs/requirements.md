@@ -149,7 +149,7 @@ stateDiagram-v2
 - [x] Users see only their own orders and can cancel only `pending` ones
 - [x] Admins see all orders, filter by status, oldest `pending` first
 - [x] Admins approve / reject (reason required) / fulfill following section 4
-- [ ] Approval deducts stock correctly and is refused when stock is insufficient
+- [x] Approval deducts stock correctly and is refused when stock is insufficient
 - [ ] Order page shows status badge and decision/fulfillment timestamps
 - [ ] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
 
