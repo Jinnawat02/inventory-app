@@ -27,7 +27,7 @@
           <td class="px-4 py-2"><%= order.user.name %></td>
           <td class="px-4 py-2"><%= truncate(order.purpose, length: 60) %></td>
           <td class="px-4 py-2 whitespace-nowrap"><%= l(order.created_at) %></td>
-          <td class="px-4 py-2"><%= order.status_name %></td>
+          <td class="px-4 py-2"><%= order_status_badge(order) %></td>
         </tr>
       <% end %>
       <% if @orders.empty? %>

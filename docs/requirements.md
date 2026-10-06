@@ -150,7 +150,7 @@ stateDiagram-v2
 - [x] Admins see all orders, filter by status, oldest `pending` first
 - [x] Admins approve / reject (reason required) / fulfill following section 4
 - [x] Approval deducts stock correctly and is refused when stock is insufficient
-- [ ] Order page shows status badge and decision/fulfillment timestamps
+- [x] Order page shows status badge and decision/fulfillment timestamps
 - [ ] Tests cover valid and invalid transitions, stock deduction, insufficient stock, and access control
 
 ### Phase 4 — Email Notifications

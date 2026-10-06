@@ -156,4 +156,39 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to order_path(orders(:approved_one))
     assert_equal "ใช้พิมพ์รายงานประจำไตรมาส", orders(:approved_one).reload.purpose
   end
+
+  test "show displays the status badge and decision timestamps" do
+    order = orders(:approved_one)
+
+    get order_path(order)
+
+    assert_select "#order_status .order-status[data-status='approved']", "อนุมัติแล้ว"
+    assert_select "#order_created_at", I18n.l(order.created_at)
+    assert_select "#order_decided_at", I18n.l(order.decided_at)
+    assert_select "#order_decided_by", users(:admin).name
+    assert_select "#order_fulfilled_at", 0
+  end
+
+  test "show a pending order has no decision timestamps" do
+    get order_path(orders(:pending_one))
+
+    assert_select "#order_status .order-status", "รออนุมัติ"
+    assert_select "#order_decided_at", 0
+  end
+
+  test "show a rejected order with its reason" do
+    sign_in_as users(:two)
+
+    get order_path(orders(:rejected_two))
+
+    assert_select "#order_status .order-status", "ไม่อนุมัติ"
+    assert_select "#order_timeline dt", /วันที่ไม่อนุมัติ/
+    assert_select "#admin_note", /เบิกเกินความจำเป็น/
+  end
+
+  test "index shows status badges" do
+    get orders_path
+
+    assert_select "##{dom_id(orders(:approved_one))} .order-status", "อนุมัติแล้ว"
+  end
 end

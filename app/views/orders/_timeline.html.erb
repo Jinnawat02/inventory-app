@@ -1,0 +1,24 @@
+<dl class="mt-6 grid gap-4 sm:grid-cols-3 text-sm" id="order_timeline">
+  <div>
+    <dt class="text-gray-500">วันที่ขอเบิก</dt>
+    <dd id="order_created_at"><%= l(order.created_at) %></dd>
+    <dd class="text-gray-500"><%= order.user.name %></dd>
+  </div>
+
+  <% if order.decided_at %>
+    <div>
+      <dt class="text-gray-500"><%= order.rejected? ? "วันที่ไม่อนุมัติ" : "วันที่อนุมัติ" %></dt>
+      <dd id="order_decided_at"><%= l(order.decided_at) %></dd>
+      <% if order.decided_by %>
+        <dd class="text-gray-500" id="order_decided_by"><%= order.decided_by.name %></dd>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if order.fulfilled_at %>
+    <div>
+      <dt class="text-gray-500">วันที่จ่ายของ</dt>
+      <dd id="order_fulfilled_at"><%= l(order.fulfilled_at) %></dd>
+    </div>
+  <% end %>
+</dl>

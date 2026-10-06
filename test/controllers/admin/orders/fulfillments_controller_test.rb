@@ -27,4 +27,12 @@ class Admin::Orders::FulfillmentsControllerTest < ActionDispatch::IntegrationTes
     assert_redirected_to root_path
     assert orders(:approved_one).reload.approved?
   end
+
+  test "fulfilled order shows the fulfillment timestamp" do
+    post admin_order_fulfillment_path(orders(:approved_one))
+    follow_redirect!
+
+    assert_select "#order_status .order-status", "จ่ายของแล้ว"
+    assert_select "#order_fulfilled_at", I18n.l(orders(:approved_one).reload.fulfilled_at)
+  end
 end

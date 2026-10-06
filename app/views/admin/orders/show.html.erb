@@ -9,10 +9,12 @@
         <h1 class="text-2xl font-bold">ใบเบิก #<%= @order.id %></h1>
         <p class="text-sm text-gray-600" id="order_requester">ผู้ขอเบิก: <%= @order.user.name %> (<%= @order.user.email_address %>)</p>
       </div>
-      <span id="order_status"><%= @order.status_name %></span>
+      <span id="order_status"><%= order_status_badge(@order) %></span>
     </div>
 
     <p class="mt-4 text-gray-700 whitespace-pre-line" id="order_purpose"><%= @order.purpose %></p>
+
+    <%= render "orders/timeline", order: @order %>
 
     <%= render "orders/lines", order: @order, show_stock: @order.pending? %>
 
