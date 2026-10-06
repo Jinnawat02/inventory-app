@@ -129,13 +129,13 @@ stateDiagram-v2
 ## 6. Phases and Acceptance Criteria
 
 ### Phase 1 — Setup, Authentication, Roles
-- [ ] Create a Rails 8.1.4 app at the repo root
-- [ ] Install authentication with the Rails generator and add `name`, `role`, `active` to User
-- [ ] Every page requires sign-in; `active: false` accounts cannot sign in
-- [ ] `require_admin` filter and `Current.user.admin?` work
-- [ ] Admins manage users (list / create / edit role / deactivate) and cannot deactivate themselves
-- [ ] Seeds: 1 admin from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` and 2 sample users (password from `SEED_USER_PASSWORD`)
-- [ ] Tests cover sign-in, admin authorization, and deactivation
+- [x] Create a Rails 8.1.4 app at the repo root
+- [x] Install authentication with the Rails generator and add `name`, `role`, `active` to User
+- [x] Every page requires sign-in; `active: false` accounts cannot sign in
+- [x] `require_admin` filter and `Current.user.admin?` work
+- [x] Admins manage users (list / create / edit role / deactivate) and cannot deactivate themselves
+- [x] Seeds: 1 admin from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` and 2 sample users (password from `SEED_USER_PASSWORD`)
+- [x] Tests cover sign-in, admin authorization, and deactivation
 
 ### Phase 2 — Items
 - [ ] Admin: item CRUD and stock adjustment

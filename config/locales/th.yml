@@ -1,0 +1,93 @@
+th:
+  activerecord:
+    models:
+      user: ผู้ใช้
+    attributes:
+      user:
+        name: ชื่อ
+        email_address: อีเมล
+        password: รหัสผ่าน
+        password_confirmation: ยืนยันรหัสผ่าน
+        role: บทบาท
+        active: สถานะการใช้งาน
+    errors:
+      models:
+        user:
+          attributes:
+            active:
+              cannot_deactivate_self: ไม่สามารถระงับบัญชีของตนเองได้
+      messages:
+        record_invalid: "ข้อมูลไม่ถูกต้อง: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "ไม่สามารถลบได้เนื่องจากมี%{record}ที่เกี่ยวข้องอยู่"
+          has_many: "ไม่สามารถลบได้เนื่องจากมี%{record}ที่เกี่ยวข้องอยู่"
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: ต้องได้รับการยอมรับ
+      blank: ต้องไม่เว้นว่าง
+      confirmation: ไม่ตรงกับ%{attribute}
+      empty: ต้องไม่เว้นว่าง
+      equal_to: ต้องเท่ากับ %{count}
+      even: ต้องเป็นเลขคู่
+      exclusion: ไม่สามารถใช้ค่านี้ได้
+      greater_than: ต้องมากกว่า %{count}
+      greater_than_or_equal_to: ต้องมากกว่าหรือเท่ากับ %{count}
+      in: ต้องอยู่ในช่วง %{count}
+      inclusion: ไม่อยู่ในรายการที่กำหนด
+      invalid: ไม่ถูกต้อง
+      less_than: ต้องน้อยกว่า %{count}
+      less_than_or_equal_to: ต้องน้อยกว่าหรือเท่ากับ %{count}
+      model_invalid: "ข้อมูลไม่ถูกต้อง: %{errors}"
+      not_a_number: ต้องเป็นตัวเลข
+      not_an_integer: ต้องเป็นจำนวนเต็ม
+      odd: ต้องเป็นเลขคี่
+      other_than: ต้องไม่เท่ากับ %{count}
+      password_too_long: ยาวเกินไป
+      present: ต้องเว้นว่าง
+      required: ต้องระบุ
+      taken: ถูกใช้ไปแล้ว
+      too_long: ยาวเกินไป (ไม่เกิน %{count} ตัวอักษร)
+      too_short: สั้นเกินไป (อย่างน้อย %{count} ตัวอักษร)
+      wrong_length: ความยาวไม่ถูกต้อง (ต้องมี %{count} ตัวอักษร)
+  helpers:
+    select:
+      prompt: กรุณาเลือก
+    submit:
+      create: บันทึก
+      update: บันทึก
+      submit: บันทึก
+  date:
+    abbr_day_names: [อา., จ., อ., พ., พฤ., ศ., ส.]
+    day_names: [อาทิตย์, จันทร์, อังคาร, พุธ, พฤหัสบดี, ศุกร์, เสาร์]
+    abbr_month_names: [~, ม.ค., ก.พ., มี.ค., เม.ย., พ.ค., มิ.ย., ก.ค., ส.ค., ก.ย., ต.ค., พ.ย., ธ.ค.]
+    month_names: [~, มกราคม, กุมภาพันธ์, มีนาคม, เมษายน, พฤษภาคม, มิถุนายน, กรกฎาคม, สิงหาคม, กันยายน, ตุลาคม, พฤศจิกายน, ธันวาคม]
+    order:
+      - :day
+      - :month
+      - :year
+    formats:
+      default: "%d/%m/%Y"
+      short: "%e %b"
+      long: "%e %B %Y"
+  time:
+    am: ก่อนเที่ยง
+    pm: หลังเที่ยง
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%e %b %H:%M"
+      long: "%e %B %Y %H:%M น."
+  number:
+    format:
+      delimiter: ","
+      precision: 2
+      separator: "."
+  support:
+    array:
+      last_word_connector: " และ "
+      two_words_connector: " และ "
+      words_connector: ", "
+  users:
+    roles:
+      user: ผู้ใช้
+      admin: ผู้ดูแลระบบ

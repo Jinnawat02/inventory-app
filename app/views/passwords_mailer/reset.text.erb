@@ -1,0 +1,6 @@
+สวัสดีคุณ<%= @user.name %>
+
+คุณสามารถตั้งรหัสผ่านใหม่ได้ที่
+<%= edit_password_url(@user.password_reset_token) %>
+
+ลิงก์นี้จะหมดอายุภายใน <%= (@user.password_reset_token_expires_in / 1.minute).to_i %> นาที

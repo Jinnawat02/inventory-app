@@ -1,0 +1,44 @@
+<%= form_with model: [ :admin, user ], class: "space-y-5 bg-white rounded-lg shadow-sm p-6" do |form| %>
+  <% if user.errors.any? %>
+    <div class="py-2 px-3 bg-red-50 text-red-600 rounded-lg" id="error_explanation">
+      <ul class="list-disc list-inside">
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, class: "block font-medium" %>
+    <%= form.text_field :name, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div>
+    <%= form.label :email_address, class: "block font-medium" %>
+    <%= form.email_field :email_address, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div>
+    <%= form.label :role, class: "block font-medium" %>
+    <%= form.select :role, User.roles.keys.map { |role| [ t("users.roles.#{role}"), role ] }, {}, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div>
+    <%= form.label :password, class: "block font-medium" %>
+    <%= form.password_field :password, required: user.new_record?, autocomplete: "new-password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    <% if user.persisted? %>
+      <p class="text-sm text-gray-500 mt-1">เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน</p>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation, class: "block font-medium" %>
+    <%= form.password_field :password_confirmation, required: user.new_record?, autocomplete: "new-password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= form.submit "บันทึก", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+    <%= link_to "ยกเลิก", admin_users_path, class: "text-gray-600 underline" %>
+  </div>
+<% end %>
