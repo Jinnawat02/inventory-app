@@ -5,7 +5,7 @@
 วัตถุประสงค์: <%= @order.purpose %>
 
 รายการ:
-<% @order.order_items.includes(:item).each do |line| -%>
+<% @order.order_items.each do |line| -%>
 - <%= line.item.name %> (<%= line.item.sku %>): <%= line.quantity %> <%= line.item.unit %>
 <% end -%>
 

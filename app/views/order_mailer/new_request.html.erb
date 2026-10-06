@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @order.order_items.includes(:item).each do |line| %>
+    <% @order.order_items.each do |line| %>
       <tr>
         <td><%= line.item.name %> (<%= line.item.sku %>)</td>
         <td align="right"><%= line.quantity %> <%= line.item.unit %></td>
