@@ -45,6 +45,9 @@ th:
             order_items:
               too_short: ต้องมีอย่างน้อย 1 รายการ
               duplicate_item: มีพัสดุซ้ำกัน กรุณารวมเป็นรายการเดียว
+              locked: แก้ไขได้เฉพาะใบเบิกที่รออนุมัติ
+            status:
+              invalid_transition: ไม่สามารถเปลี่ยนเป็นสถานะนี้ได้
         order_item:
           attributes:
             item:

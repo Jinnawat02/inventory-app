@@ -1,5 +1,10 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: :show
+  before_action :set_order, only: %i[show edit update]
+  before_action :require_editable, only: %i[edit update]
+
+  def index
+    @orders = Current.user.orders.newest_first
+  end
 
   def show
   end
@@ -19,9 +24,24 @@ class OrdersController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @order.update(order_params)
+      redirect_to @order, notice: "บันทึกใบเบิกเรียบร้อยแล้ว"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
     def set_order
       @order = Current.user.orders.find(params[:id])
+    end
+
+    def require_editable
+      redirect_to @order, alert: "แก้ไขได้เฉพาะใบเบิกที่รออนุมัติ" unless @order.editable?
     end
 
     def order_params

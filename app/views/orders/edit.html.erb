@@ -1,0 +1,6 @@
+<% content_for :title, "แก้ไขใบเบิก ##{@order.id}" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="text-2xl font-bold mb-6">แก้ไขใบเบิก #<%= @order.id %></h1>
+  <%= render "form", order: @order, items: Item.active.or(Item.where(id: @order.order_items.map(&:item_id))).ordered %>
+</div>
