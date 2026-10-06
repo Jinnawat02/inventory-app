@@ -21,9 +21,10 @@ class Order < ApplicationRecord
 
   accepts_nested_attributes_for :order_items, allow_destroy: true, reject_if: :blank_line?
 
-  normalizes :purpose, with: ->(purpose) { purpose.strip }
+  normalizes :purpose, :admin_note, with: ->(text) { text.strip }
 
   validates :purpose, presence: true
+  validates :admin_note, presence: true, if: :rejected?
   validate :has_at_least_one_line
   validate :items_listed_once
   validate :status_change_allowed, on: :update, if: :will_save_change_to_status?
@@ -48,6 +49,18 @@ class Order < ApplicationRecord
     persisted? && status_in_database == "pending"
   end
 
+  def approve!(by:)
+    transition_to!(:approved, decided_by: by, decided_at: Time.current)
+  end
+
+  def reject!(by:, note:)
+    transition_to!(:rejected, decided_by: by, decided_at: Time.current, admin_note: note)
+  end
+
+  def fulfill!
+    transition_to!(:fulfilled, fulfilled_at: Time.current)
+  end
+
   def cancel!
     transition_to!(:cancelled)
   end
@@ -62,9 +75,11 @@ class Order < ApplicationRecord
 
   private
     def transition_to!(new_status, **attributes)
-      raise InvalidTransition, "cannot change order #{id} from #{status} to #{new_status}" unless can_transition_to?(new_status)
+      with_lock do
+        raise InvalidTransition, "cannot change order #{id} from #{status} to #{new_status}" unless can_transition_to?(new_status)
 
-      update!(status: new_status, **attributes)
+        update!(status: new_status, **attributes)
+      end
     end
 
     def blank_line?(attributes)

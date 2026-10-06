@@ -55,4 +55,19 @@ class Admin::OrdersControllerTest < ActionDispatch::IntegrationTest
     get admin_order_path(orders(:pending_two))
     assert_redirected_to root_path
   end
+
+  test "show offers the actions allowed by the current status" do
+    get admin_order_path(orders(:pending_one))
+    assert_select "#admin_actions form[action=?]", admin_order_approval_path(orders(:pending_one))
+    assert_select "#admin_actions a[href=?]", new_admin_order_rejection_path(orders(:pending_one))
+    assert_select "#admin_actions form[action=?]", admin_order_fulfillment_path(orders(:pending_one)), 0
+
+    get admin_order_path(orders(:approved_one))
+    assert_select "#admin_actions form[action=?]", admin_order_fulfillment_path(orders(:approved_one))
+    assert_select "#admin_actions form[action=?]", admin_order_approval_path(orders(:approved_one)), 0
+
+    get admin_order_path(orders(:rejected_two))
+    assert_select "#admin_actions *", 0
+    assert_select "#admin_note", /เบิกเกินความจำเป็น/
+  end
 end

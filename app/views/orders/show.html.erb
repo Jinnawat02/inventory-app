@@ -13,6 +13,13 @@
 
     <%= render "orders/lines", order: @order %>
 
+    <% if @order.rejected? %>
+      <div class="mt-6 py-2 px-3 bg-red-50 text-red-700 rounded-lg" id="admin_note">
+        <p class="font-medium">เหตุผลที่ไม่อนุมัติ</p>
+        <p class="whitespace-pre-line"><%= @order.admin_note %></p>
+      </div>
+    <% end %>
+
     <% if @order.editable? %>
       <div class="mt-6 flex flex-wrap gap-2" id="owner_actions">
         <%= link_to "แก้ไข", edit_order_path(@order), class: "rounded-md px-3 py-1.5 bg-gray-100 hover:bg-gray-200" %>

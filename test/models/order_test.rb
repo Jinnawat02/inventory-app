@@ -136,4 +136,68 @@ class OrderTest < ActiveSupport::TestCase
     assert_equal Order.count, Order.with_status("lost").count
     assert_equal Order.count, Order.with_status(nil).count
   end
+
+  test "approve! records the deciding admin and time" do
+    order = orders(:pending_one)
+
+    freeze_time do
+      order.approve!(by: users(:admin))
+
+      order.reload
+      assert order.approved?
+      assert_equal users(:admin), order.decided_by
+      assert_equal Time.current, order.decided_at
+    end
+  end
+
+  test "reject! requires a reason" do
+    order = orders(:pending_one)
+
+    assert_raises(ActiveRecord::RecordInvalid) { order.reject!(by: users(:admin), note: "  ") }
+    assert order.reload.pending?
+  end
+
+  test "reject! stores the reason and deciding admin" do
+    order = orders(:pending_one)
+    order.reject!(by: users(:admin), note: "งบประมาณไม่พอ")
+
+    order.reload
+    assert order.rejected?
+    assert_equal "งบประมาณไม่พอ", order.admin_note
+    assert_equal users(:admin), order.decided_by
+    assert order.decided_at
+  end
+
+  test "fulfill! moves an approved order to fulfilled" do
+    order = orders(:approved_one)
+
+    freeze_time do
+      order.fulfill!
+      assert order.reload.fulfilled?
+      assert_equal Time.current, order.fulfilled_at
+    end
+  end
+
+  test "transitions not in the table raise InvalidTransition" do
+    assert_raises(Order::InvalidTransition) { orders(:pending_one).fulfill! }
+    assert_raises(Order::InvalidTransition) { orders(:approved_one).approve!(by: users(:admin)) }
+    assert_raises(Order::InvalidTransition) { orders(:approved_one).reject!(by: users(:admin), note: "x") }
+    assert_raises(Order::InvalidTransition) { orders(:rejected_two).approve!(by: users(:admin)) }
+    assert_raises(Order::InvalidTransition) { orders(:rejected_two).fulfill! }
+
+    cancelled = orders(:pending_one).tap(&:cancel!)
+    assert_raises(Order::InvalidTransition) { cancelled.approve!(by: users(:admin)) }
+
+    fulfilled = orders(:approved_one).tap(&:fulfill!)
+    assert_raises(Order::InvalidTransition) { fulfilled.cancel! }
+    assert_raises(Order::InvalidTransition) { fulfilled.fulfill! }
+  end
+
+  test "transitions re-check the status stored in the database" do
+    stale = Order.find(orders(:pending_one).id)
+    orders(:pending_one).reject!(by: users(:admin), note: "ซ้ำ")
+
+    assert_raises(Order::InvalidTransition) { stale.approve!(by: users(:admin)) }
+    assert Order.find(stale.id).rejected?
+  end
 end
