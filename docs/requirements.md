@@ -135,7 +135,7 @@ stateDiagram-v2
 - [x] `require_admin` filter and `Current.user.admin?` work
 - [x] Admins manage users (list / create / edit role / deactivate) and cannot deactivate themselves
 - [x] Seeds: 1 admin from `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` and 2 sample users (password from `SEED_USER_PASSWORD`)
-- [ ] Tests cover sign-in, admin authorization, and deactivation
+- [x] Tests cover sign-in, admin authorization, and deactivation
 
 ### Phase 2 — Items
 - [ ] Admin: item CRUD and stock adjustment
