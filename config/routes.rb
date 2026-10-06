@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
+  resources :items, only: %i[index show]
+
   namespace :admin do
     resources :items, except: :show do
       resource :stock_adjustment, only: %i[new create], module: :items

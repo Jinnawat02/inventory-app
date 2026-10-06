@@ -2,6 +2,7 @@
   <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
     <div class="flex flex-wrap items-center gap-4">
       <%= link_to "Inventory App", root_path, class: "text-lg font-bold text-blue-700" %>
+      <%= link_to "รายการพัสดุ", items_path, class: "text-sm text-gray-700 hover:text-blue-700" %>
       <% if Current.user.admin? %>
         <%= link_to "จัดการพัสดุ", admin_items_path, class: "text-sm text-gray-700 hover:text-blue-700" %>
         <%= link_to "จัดการผู้ใช้", admin_users_path, class: "text-sm text-gray-700 hover:text-blue-700" %>
