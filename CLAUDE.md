@@ -62,5 +62,8 @@ Keep the existing README content; merge rather than discard it.
 
 ## Git
 
+- `develop` is the integration branch. Start every session from `develop` and target pull requests at `develop`.
+- Never commit or push directly to `main` or `develop`; always work on a feature branch.
+- Before opening a PR, rebase or merge the latest `develop` into the feature branch and rerun tests.
 - Small, focused commits with imperative messages, e.g. `Add approve transition to orders`.
 - Never force-push or rewrite history on `main`.
