@@ -5,7 +5,9 @@ class Item < ApplicationRecord
   has_many :orders, through: :order_items
 
   scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
   scope :ordered, -> { order(:name) }
+  scope :by_quantity, -> { order(:quantity, :name) }
   scope :low_stock, -> { where(arel_table[:quantity].lteq(arel_table[:low_stock_threshold])) }
   scope :search, ->(term) {
     pattern = "%#{sanitize_sql_like(term.to_s.strip)}%"
