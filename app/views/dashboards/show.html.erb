@@ -1,0 +1,54 @@
+<% content_for :title, "แดชบอร์ด" %>
+
+<h1 class="text-2xl font-bold mb-6">แดชบอร์ด</h1>
+
+<section class="mb-8">
+  <h2 class="text-lg font-semibold mb-3">พัสดุ</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <%= render "dashboards/stat", id: "active_items_count", label: "พัสดุที่ใช้งาน", value: @active_items_count %>
+    <%= render "dashboards/stat", id: "low_stock_items_count", label: "พัสดุสต็อกต่ำ", value: @low_stock_items_count %>
+    <%= render "dashboards/stat", id: "inactive_items_count", label: "พัสดุที่ปิดใช้งาน", value: @inactive_items_count %>
+  </div>
+</section>
+
+<section class="mb-8">
+  <h2 class="text-lg font-semibold mb-3">ผู้ใช้ที่ใช้งานอยู่ตามบทบาท</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <% @active_users_by_role.each do |role, count| %>
+      <%= render "dashboards/stat", id: "active_#{role}_count", label: t("users.roles.#{role}"), value: count %>
+    <% end %>
+  </div>
+</section>
+
+<section>
+  <h2 class="text-lg font-semibold mb-3">พัสดุสต็อกต่ำ <%= DashboardsController::LOW_STOCK_LIMIT %> อันดับแรก</h2>
+  <div class="overflow-x-auto bg-white rounded-lg shadow-sm">
+    <table class="min-w-full text-sm" id="low_stock_items">
+      <thead class="bg-gray-100 text-left text-gray-600">
+        <tr>
+          <th class="px-4 py-2">ชื่อพัสดุ</th>
+          <th class="px-4 py-2">รหัส</th>
+          <th class="px-4 py-2 text-right">คงเหลือ</th>
+          <th class="px-4 py-2">หน่วย</th>
+          <th class="px-4 py-2 text-right">จุดแจ้งเตือน</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <% @low_stock_items.each do |item| %>
+          <tr id="<%= dom_id(item) %>">
+            <td class="px-4 py-2"><%= link_to item.name, item, class: "text-blue-700 hover:underline" %></td>
+            <td class="px-4 py-2 font-mono"><%= item.sku %></td>
+            <td class="px-4 py-2 text-right"><%= number_with_delimiter(item.quantity) %></td>
+            <td class="px-4 py-2"><%= item.unit %></td>
+            <td class="px-4 py-2 text-right"><%= number_with_delimiter(item.low_stock_threshold) %></td>
+          </tr>
+        <% end %>
+        <% if @low_stock_items.empty? %>
+          <tr id="no_low_stock_items">
+            <td colspan="5" class="px-4 py-6 text-center text-gray-500">ไม่มีพัสดุสต็อกต่ำ</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

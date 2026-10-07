@@ -60,6 +60,14 @@ class ItemTest < ActiveSupport::TestCase
     assert_not_includes Item.active, items(:retired)
   end
 
+  test "inactive scope returns only inactive items" do
+    assert_equal [ items(:retired) ], Item.inactive.to_a
+  end
+
+  test "by_quantity orders by quantity then name" do
+    assert_equal [ items(:retired), items(:toner), items(:paper), items(:pen) ], Item.by_quantity.to_a
+  end
+
   test "low_stock scope returns items at or below their threshold" do
     assert_equal [ items(:retired), items(:toner) ].sort_by(&:id), Item.low_stock.sort_by(&:id)
   end
