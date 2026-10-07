@@ -1,0 +1,23 @@
+<% content_for :title, "ข้อมูลส่วนตัว" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+    <h1 class="text-2xl font-bold">ข้อมูลส่วนตัว</h1>
+    <%= link_to "แก้ไขข้อมูลส่วนตัว", edit_profile_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+  </div>
+
+  <dl class="bg-white rounded-lg shadow-sm p-6 grid gap-4 sm:grid-cols-3" id="profile">
+    <div>
+      <dt class="text-sm text-gray-500"><%= User.human_attribute_name(:name) %></dt>
+      <dd class="text-lg font-semibold" id="profile_name"><%= @user.name %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-500"><%= User.human_attribute_name(:email_address) %></dt>
+      <dd class="text-lg font-semibold break-all" id="profile_email"><%= @user.email_address %></dd>
+    </div>
+    <div>
+      <dt class="text-sm text-gray-500"><%= User.human_attribute_name(:role) %></dt>
+      <dd class="text-lg font-semibold" id="profile_role"><%= @user.role_name %></dd>
+    </div>
+  </dl>
+</div>

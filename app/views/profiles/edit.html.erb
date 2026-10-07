@@ -1,0 +1,40 @@
+<% content_for :title, "แก้ไขข้อมูลส่วนตัว" %>
+
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="text-2xl font-bold mb-6">แก้ไขข้อมูลส่วนตัว</h1>
+
+  <%= form_with model: @user, url: profile_path, method: :patch, class: "space-y-5 bg-white rounded-lg shadow-sm p-6" do |form| %>
+    <%= render "shared/form_errors", record: @user %>
+
+    <div>
+      <%= form.label :name, class: "block font-medium" %>
+      <%= form.text_field :name, required: true, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+    </div>
+
+    <fieldset class="space-y-5 border-t border-gray-200 pt-5">
+      <legend class="font-semibold">เปลี่ยนรหัสผ่าน</legend>
+      <p class="text-sm text-gray-500">เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน</p>
+
+      <div>
+        <%= form.label :current_password, "รหัสผ่านปัจจุบัน", class: "block font-medium" %>
+        <%= form.password_field :current_password, value: nil, autocomplete: "current-password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+      </div>
+
+      <div>
+        <%= form.label :password, "รหัสผ่านใหม่", class: "block font-medium" %>
+        <%= form.password_field :password, value: nil, autocomplete: "new-password", minlength: ProfilesController::MINIMUM_PASSWORD_LENGTH, maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+        <p class="text-sm text-gray-500 mt-1">อย่างน้อย <%= ProfilesController::MINIMUM_PASSWORD_LENGTH %> ตัวอักษร</p>
+      </div>
+
+      <div>
+        <%= form.label :password_confirmation, "ยืนยันรหัสผ่านใหม่", class: "block font-medium" %>
+        <%= form.password_field :password_confirmation, value: nil, autocomplete: "new-password", maxlength: 72, class: "block shadow-sm rounded-md border border-gray-400 px-3 py-2 mt-1 w-full" %>
+      </div>
+    </fieldset>
+
+    <div class="flex items-center gap-3">
+      <%= form.submit "บันทึก", class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
+      <%= link_to "ยกเลิก", profile_path, class: "text-gray-600 underline" %>
+    </div>
+  <% end %>
+</div>
