@@ -34,4 +34,5 @@ Rails.application.routes.draw do
   end
 
   root "home#index"
+  resource :profile, only: %i[show edit update]
 end
